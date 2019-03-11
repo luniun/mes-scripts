@@ -59,6 +59,7 @@ wamp
 4)
 #Creation d'utilisateur
 userplus
+;;
 5)
 echo "Fin du script"
 exit 0
