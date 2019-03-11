@@ -1,29 +1,26 @@
-#!/bin/bash
-chmod +x proxmox.sh wamp-server.sh deps.sh 
-cmd=(dialog --separate-output --checklist "Select options:" 22 76 16)
-options=(1 "Option 1" off    # any option can be set to default to "on"
-         2 "Option 2" off
-         3 "Option 3" off
-         4 "Option 4" off)
-choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-clear
-for choice in $choices
-do
-    case $choice in
-        1)
-            echo "Install Proxmox"
-            ./proxmox.sh
-            ;;
-        2)
-            echo "Install Wamp Server"
-            ./wamp-server.sh
-            ;;
-        3)
-            echo "Install Deps"
-            ./deps.sh
-            ;;
-        4)
-            echo "Fourth Option"
-            ;;
-    esac
-done
+#! /bin/bash
+
+whiptail --title "Test" --checklist "Choose:" 20 78 15 \
+"deps" "" on \
+"proxmox" "" off \
+"wamp-server" "" off \
+
+# If "John" is selected, run this function:
+function deps {
+echo "You chose deps"
+./deps.sh
+}
+
+# If "Glen" is selected, run this function:
+function proxmox {
+echo "You chose Proxmox"
+./proxmox.sh
+}
+
+# If "Adam" is selected, run this function:
+function wanp-server {
+echo "You chose Wamp-Server"
+./wamp-server.sh
+}
+
+exit
