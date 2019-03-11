@@ -26,8 +26,21 @@ apt install apache2 libapache2-mod-php7.0 -y
 apt install phpmyadmin -y
 }
 
+function userplus {
+echo "Entrer votre User: "
+read newuser
+adduser $newuser
+mkdir /home/$newuser/torrent
+mkdir /home/$newuser/torrent/en-cours
+mkdir /home/$newuser/torrent/terminer
+mkdir /home/$newuser/torrent/save
+mkdir /home/$newuser/torrent/watch
+mkdir /home/$newuser/torrent/media
+chown -R $newuser:$newuser /home/$newuser
+}
+
 PS3="Votre choix : "
-select item in "- Deps -" "- Proxmox -" "- Wamp -" "- Fin -"
+select item in "- Deps -" "- Proxmox -" "- Wamp -" "- Utilisateur -" "- Fin -"
 do
 echo "Vous avez choisi l'item $REPLY : $item"
 case $REPLY in
@@ -44,6 +57,9 @@ proxmox
 wamp
 ;;
 4)
+#Creation d'utilisateur
+userplus
+5)
 echo "Fin du script"
 exit 0
 ;;
