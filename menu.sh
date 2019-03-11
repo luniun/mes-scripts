@@ -1,26 +1,54 @@
-#! /bin/bash
-
-whiptail --title "Test" --checklist "Choose:" 20 78 15 \
-"deps" "" on \
-"proxmox" "" off \
-"wamp-server" "" off \
-
-# If "John" is selected, run this function:
+#!/bin/bash
 function deps {
-echo "You chose deps"
-./deps.sh
+echo "Installation des dependances"
+apt update
+apt upgrade -y
+apt install curl git-core ca-certificates -y
 }
 
-# If "Glen" is selected, run this function:
 function proxmox {
-echo "You chose Proxmox"
-./proxmox.sh
+echo "Installation de proxmox"
+echo "deb http://download.proxmox.com/debian/pve stretch pve-no-subscription" > /etc/apt/sources.list.d/pve-install-repo.list
+wget http://download.proxmox.com/debian/proxmox-ve-release-5.x.gpg -O /etc/apt/trusted.gpg.d/proxmox-ve-release-5.x.gpg
+apt update
+apt dist-upgrade -y
+apt install proxmox-ve postfix open-iscsi -y
+apt remove os-prober -y
 }
 
-# If "Adam" is selected, run this function:
-function wanp-server {
-echo "You chose Wamp-Server"
-./wamp-server.sh
+function wamp {
+echo "Installation du serveur Wamp"
+apt update
+apt upgrade -y
+apt install mariadb-client mariadb-server -y
+apt install php7.0 php7.0-mysql -y
+apt install apache2 libapache2-mod-php7.0 -y
+apt install phpmyadmin -y
 }
 
-exit
+PS3="Votre choix : "
+select item in "- Deps -" "- Proxmox -" "- Wamp -" "- Fin -"
+do
+echo "Vous avez choisi l'item $REPLY : $item"
+case $REPLY in
+1)
+# Appel de la fonction sauve
+deps
+;;
+2)
+# Appel de la fonction restaure
+proxmox
+;;
+3)
+#Appel de la fonction wamp
+wamp
+;;
+4)
+echo "Fin du script"
+exit 0
+;;
+*)
+echo "Choix incorrect"
+;;
+esac
+done
